@@ -43,7 +43,7 @@
   h1{font-size:44px;line-height:.95;font-weight:800;letter-spacing:3px;color:var(--cyan);
     text-shadow:0 0 14px rgba(0,229,255,.8),3px 3px 0 var(--ink);margin:2px 0 12px}
   h1 span{color:var(--green);text-shadow:0 0 14px rgba(57,255,136,.8),3px 3px 0 var(--ink)}
-  h2{font-size:22px;line-height:1.2;margin:4px 0 6px;font-weight:800;color:var(--text);word-break:break-word}
+  h2{font-size:21px;line-height:1.2;margin:4px 0 6px;font-weight:800;color:var(--text);word-break:break-word}
   .tag{font-size:13px;color:var(--dim);margin-bottom:18px}
   .cur{color:var(--green);animation:blink 1s steps(2) infinite}
   .kicker{display:inline-block;font-size:13px;font-weight:800;letter-spacing:2px;background:var(--pink);color:#fff;
@@ -61,15 +61,24 @@
     touch-action:manipulation}
   .btn:active{transform:translateY(4px);box-shadow:0 2px 0 #168a48,0 0 18px rgba(57,255,136,.4)}
   .btn:disabled{opacity:.5}
+  .btn2{width:100%;font-family:var(--mono);font-size:17px;font-weight:800;letter-spacing:1.5px;color:var(--cyan);
+    background:rgba(0,229,255,.06);border:2px solid var(--cyan);border-radius:12px;padding:12px 0;margin-top:12px;
+    cursor:pointer;box-shadow:0 0 16px rgba(0,229,255,.25);touch-action:manipulation}
+  .btn2:active{transform:translateY(2px)}
   .link{background:none;border:none;font-family:var(--mono);font-size:13px;font-weight:700;color:var(--dim);
-    text-decoration:underline;margin-top:14px;cursor:pointer;padding:6px}
+    text-decoration:underline;margin-top:12px;cursor:pointer;padding:6px}
   .small{font-size:12px;color:var(--dim);margin-top:14px;line-height:1.55}
+  .legend{font-size:12px;color:var(--dim);margin-top:14px;line-height:1.7;text-align:left;
+    background:#060c22;border:2px solid var(--line);border-radius:10px;padding:9px 12px}
+  .legend b{font-weight:800}
   .row{display:flex;gap:10px;margin:14px 0 10px}
   .stat{flex:1;background:#060c22;border:2px solid var(--line);border-radius:12px;padding:8px 0 6px}
   .stat small{display:block;font-size:11px;font-weight:800;letter-spacing:2px;color:var(--dim);text-transform:uppercase}
   .stat b{display:block;font-size:34px;line-height:1.15;color:var(--cyan);text-shadow:0 0 10px rgba(0,229,255,.6)}
-  .meta{font-size:13px;color:var(--dim);margin-bottom:12px}
-  .meta b{color:var(--amber)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 14px;text-align:left}
+  .grid div{background:#060c22;border:2px solid var(--line);border-radius:10px;padding:7px 10px}
+  .grid small{display:block;font-size:10px;letter-spacing:1.5px;color:var(--dim);font-weight:800}
+  .grid b{font-size:14px;color:var(--text)}
   .badge{display:inline-block;background:var(--amber);color:var(--ink);font-weight:800;letter-spacing:1px;
     border:2px solid var(--ink);border-radius:8px;padding:5px 14px;margin-bottom:14px;
     box-shadow:0 0 18px rgba(255,176,32,.55);animation:wiggle 1s ease-in-out infinite}
@@ -89,7 +98,7 @@
 
 <div id="title" class="overlay">
   <div class="card" id="titleCard">
-    <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="bt">packet-flap.sh</span></div>
+    <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="bt">packet-flap.sh v2</span></div>
     <div class="inner">
       <div class="leds"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
       <h1>FLAPPY<br><span>PACKET</span></h1>
@@ -99,6 +108,13 @@
       <div class="hint" id="hint"></div>
       <button id="play" class="btn">▶ PLAY</button>
       <p class="small" id="titleBest"></p>
+      <div class="legend">
+        <b style="color:#00e5ff">🛡 FAILOVER</b> survive one crash<br>
+        <b style="color:#a5f3fc">❄ COOLING</b> slows the hall down<br>
+        <b style="color:#ffd23f">x2 BANDWIDTH</b> double packets<br>
+        <b style="color:#ffb020">⚡ CLOSE CALL</b> skim a rack for a bonus<br>
+        4 zones: Cold Aisle → Hot Aisle → Network Core → Generator Room
+      </div>
       <p class="small">Tap · click · Space · ↑ to flap<br>Swipe down or ↓ to dive · P pause · M mute</p>
     </div>
   </div>
@@ -114,9 +130,15 @@
         <div class="stat"><small>Packets</small><b id="oScore">0</b></div>
         <div class="stat"><small>Best</small><b id="oBest">0</b></div>
       </div>
-      <p class="meta">Peak load reached: <b id="oLoad">0%</b></p>
+      <div class="grid">
+        <div><small>ZONE REACHED</small><b id="oZone">-</b></div>
+        <div><small>CLOSE CALLS</small><b id="oClose">0</b></div>
+        <div><small>POWER-UPS</small><b id="oPU">0</b></div>
+        <div><small>TIME ONLINE</small><b id="oTime">0s</b></div>
+      </div>
       <div id="newBest" class="badge gone">★ NEW RECORD ★</div>
       <button id="again" class="btn">↻ PLAY AGAIN</button>
+      <button id="share" class="btn2">📤 SHARE SCORE</button>
       <button id="change" class="link">Change tech name</button>
     </div>
   </div>
@@ -128,11 +150,11 @@
 
   // ---------- Setup ----------
   const cv = document.getElementById('game');
-  const cx = cv.getContext('2d');
+  let cx = cv.getContext('2d');
   const $ = id => document.getElementById(id);
   const titleEl = $('title'), titleCard = $('titleCard'), overEl = $('over'), overCard = $('overCard');
   const nameIn = $('name'), hint = $('hint'), playBtn = $('play'), againBtn = $('again'), changeBtn = $('change');
-  const muteBtn = $('mute'), titleBest = $('titleBest');
+  const muteBtn = $('mute'), titleBest = $('titleBest'), shareBtn = $('share');
 
   const TAU = Math.PI * 2;
   const INK = '#050a1a';
@@ -142,6 +164,15 @@
   const G = 1550, FLAP = 440, MAXFALL = 760;
   const PW = 66, CAPH = 26;
   const STEP = 1 / 240;
+  const COOL_TIME = 3.5, BOOST_TIME = 7;
+
+  const ZONES = [
+    { name: 'COLD AISLE',     tip: 'Keep it cool',                top: [8, 18, 48],  bot: [22, 50, 96],  accent: '#00e5ff' },
+    { name: 'HOT AISLE',      tip: 'Heat vents push you up!',     top: [46, 10, 22], bot: [124, 44, 32], accent: '#ff7a2f' },
+    { name: 'NETWORK CORE',   tip: 'Tighter gaps, faster traffic', top: [22, 8, 52],  bot: [58, 24, 104], accent: '#c084fc' },
+    { name: 'GENERATOR ROOM', tip: 'The racks are shaking!',      top: [22, 20, 10], bot: [78, 64, 22],  accent: '#ffd23f' }
+  ];
+  const ZONE_LEN = 15;
 
   let W = 360, scale = 1, dpr = 1, offY = 0;
 
@@ -174,7 +205,7 @@
   }
   function getNoise() {
     if (!noiseBuf) {
-      noiseBuf = ac.createBuffer(1, Math.floor(ac.sampleRate * 1), ac.sampleRate);
+      noiseBuf = ac.createBuffer(1, Math.floor(ac.sampleRate), ac.sampleRate);
       const d = noiseBuf.getChannelData(0);
       for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
     }
@@ -208,15 +239,19 @@
   }
   const arp = (notes, gap, type, vol, len) => notes.forEach((n, i) => tone(n, n, len, type, vol, i * gap));
   const sfx = {
-    flap()  { tone(660, 1180, 0.07, 'square', 0.07); tone(1320, 1320, 0.04, 'sine', 0.06, 0.05); },
-    dive()  { tone(900, 260, 0.12, 'sawtooth', 0.07); },
-    score() { tone(1568, 1568, 0.06, 'sine', 0.16); tone(2093, 2093, 0.12, 'sine', 0.13, 0.06); },
-    level() { arp([392, 523, 659, 784, 1047], 0.06, 'square', 0.07, 0.1); },
-    hit()   { noise(0.35, 0.5, 3000); tone(110, 55, 0.4, 'sawtooth', 0.2); tone(117, 58, 0.4, 'square', 0.08); },
-    thud()  { tone(140, 55, 0.15, 'sine', 0.3); },
-    over()  { arp([523, 392, 311], 0.15, 'square', 0.07, 0.14); tone(262, 131, 0.45, 'square', 0.07, 0.45); },
-    best()  { arp([523, 659, 784, 1047, 1319, 1568, 2093], 0.065, 'square', 0.07, 0.12); },
-    start() { tone(220, 220, 0.12, 'sine', 0.14); arp([523, 784, 1047], 0.09, 'triangle', 0.15, 0.12); }
+    flap()   { tone(660, 1180, 0.07, 'square', 0.07); tone(1320, 1320, 0.04, 'sine', 0.06, 0.05); },
+    dive()   { tone(900, 260, 0.12, 'sawtooth', 0.07); },
+    score()  { tone(1568, 1568, 0.06, 'sine', 0.16); tone(2093, 2093, 0.12, 'sine', 0.13, 0.06); },
+    level()  { arp([392, 523, 659, 784, 1047], 0.06, 'square', 0.07, 0.1); },
+    zone()   { arp([392, 523, 659, 784, 1047, 1319], 0.07, 'square', 0.08, 0.13); tone(196, 196, 0.5, 'triangle', 0.12); },
+    power()  { arp([784, 988, 1175, 1568], 0.05, 'sine', 0.17, 0.1); },
+    shield() { noise(0.25, 0.35, 4000); tone(880, 220, 0.3, 'triangle', 0.18); },
+    close()  { tone(600, 1800, 0.18, 'sine', 0.14); tone(2400, 2400, 0.08, 'sine', 0.08, 0.15); },
+    hit()    { noise(0.35, 0.5, 3000); tone(110, 55, 0.4, 'sawtooth', 0.2); tone(117, 58, 0.4, 'square', 0.08); },
+    thud()   { tone(140, 55, 0.15, 'sine', 0.3); },
+    over()   { arp([523, 392, 311], 0.15, 'square', 0.07, 0.14); tone(262, 131, 0.45, 'square', 0.07, 0.45); },
+    best()   { arp([523, 659, 784, 1047, 1319, 1568, 2093], 0.065, 'square', 0.07, 0.12); },
+    start()  { tone(220, 220, 0.12, 'sine', 0.14); arp([523, 784, 1047], 0.09, 'triangle', 0.15, 0.12); }
   };
   function startHum() {
     if (!ac || hum) return;
@@ -257,6 +292,7 @@
     if (master) master.gain.value = muted ? 0 : 0.5;
   }
   setMuteIcon();
+  function buzz(ms) { try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) {} }
 
   // ---------- State ----------
   let state = 'title'; // title | ready | play | dying | over
@@ -264,11 +300,17 @@
   const bird = { x: 100, y: H * 0.42, vy: 0, r: 13, rot: 0, wing: 0, flapT: 0 };
   let pipes = [], parts = [], score = 0, time = 0, worldX = 0;
   let shake = 0, flash = 0, scorePulse = 0, deadT = 0, grounded = false, newBest = false;
-  let heat = 0, banner = null, canAgain = false, rackId = 0, trailT = 0, peakLoad = 0;
+  let zoneBlend = 0, banner = null, canAgain = false, rackId = 0, trailT = 0;
+  let shield = false, invT = 0, slowT = 0, boostT = 0, slowmoT = 0, timeScale = 1;
+  let nearMisses = 0, puUsed = 0, aliveT = 0, maxZone = 0, inPlume = false;
+  let cardFile = null, cardCanvas = null;
 
   const ACCENTS = ['#00e5ff', '#ff3df2', '#9dff3d', '#ffb020'];
-  const COLD = [[8, 18, 48], [22, 50, 96]];
-  const HOT = [[40, 8, 34], [112, 30, 58]];
+  const PU = {
+    shield: { col: '#00e5ff', label: 'FAILOVER READY' },
+    cool:   { col: '#a5f3fc', label: 'COOLING ON' },
+    x2:     { col: '#ffd23f', label: 'BANDWIDTH x2' }
+  };
 
   const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
   const mix = (a, b, f) => a.map((v, i) => Math.round(v + (b[i] - v) * f));
@@ -278,27 +320,33 @@
   const loadFrac = () => Math.min(score / 45, 1);
   const loadPct = () => Math.round(loadFrac() * 100);
   const loadTier = p => p < 25 ? 'NORMAL' : p < 60 ? 'BUSY' : p < 90 ? 'PEAK' : 'MAX';
+  const zoneIdx = () => Math.min(Math.floor(score / ZONE_LEN), ZONES.length - 1);
+  function rankTitle(s) {
+    return s === 0 ? 'Cold Start' : s < 5 ? 'Handshake Retry' : s < 15 ? 'Solid Uptime' : s < 30 ? 'Senior Tech' : s < 60 ? 'Five Nines' : 'Hyperscale Legend';
+  }
 
   function diff() {
-    const d = loadFrac();
-    return {
-      speed: 155 + 120 * d,
-      gap: 178 - 52 * d,
-      spacing: 232 - 32 * d,
-      move: score >= 8 ? Math.min(14 + (score - 8) * 2, 46) : 0
-    };
+    const d = loadFrac(), z = zoneIdx();
+    let speed = 155 + 120 * d, gap = 178 - 52 * d, spacing = 232 - 32 * d;
+    if (z >= 2) { speed += 20; gap -= 10; }
+    let move = score >= 8 ? Math.min(14 + (score - 8) * 2, 46) : 0;
+    let moveChance = Math.min(0.25 + score * 0.02, 0.7);
+    if (z === 3) { move = Math.max(move, 26); moveChance = 0.85; }
+    return { speed, gap, spacing, move, moveChance };
   }
 
   function reset() {
-    score = 0; pipes = []; parts = []; banner = null; rackId = 0; peakLoad = 0;
+    score = 0; pipes = []; parts = []; banner = null; rackId = 0;
     bird.x = birdX(); bird.y = H * 0.42; bird.vy = 0; bird.rot = 0; bird.flapT = 0;
     shake = 0; flash = 0; scorePulse = 0; deadT = 0; grounded = false; newBest = false; paused = false;
+    shield = false; invT = 0; slowT = 0; boostT = 0; slowmoT = 0; timeScale = 1;
+    nearMisses = 0; puUsed = 0; aliveT = 0; maxZone = 0; inPlume = false;
   }
 
   function spawn(x) {
-    const D = diff(), g = D.gap;
+    const D = diff(), g = D.gap, z = zoneIdx();
     let amp = 0;
-    if (D.move && Math.random() < Math.min(0.25 + score * 0.02, 0.7)) amp = D.move * (0.6 + Math.random() * 0.4);
+    if (D.move && Math.random() < D.moveChance) amp = D.move * (0.6 + Math.random() * 0.4);
     const minY = 100 + g / 2 + amp, maxY = GROUND - 50 - g / 2 - amp;
     const prev = pipes.length ? pipes[pipes.length - 1].base : (minY + maxY) / 2;
     let y = minY + Math.random() * (maxY - minY);
@@ -306,10 +354,19 @@
     y = clamp(y, minY, maxY);
     const ph = Math.random() * TAU;
     rackId++;
-    pipes.push({
-      x, base: y, y: y + Math.sin(ph) * amp, gap: g, amp, ph, freq: 1.3 + Math.random() * 0.9, t: 0, passed: false,
-      id: rackId, col: ACCENTS[rackId % ACCENTS.length], label: 'R' + String(rackId % 100).padStart(2, '0')
-    });
+    const p = {
+      x, base: y, y: y + Math.sin(ph) * amp, gap: g, amp, ph, freq: 1.3 + Math.random() * 0.9, t: 0,
+      passed: false, cleared: false, minClear: Infinity, sp: D.spacing,
+      plume: z === 1 && pipes.length > 0 && Math.random() < 0.6,
+      id: rackId, col: ACCENTS[rackId % ACCENTS.length], label: 'R' + String(rackId % 100).padStart(2, '0'),
+      pu: null
+    };
+    if (score >= 3 && Math.random() < 0.2 && !pipes.some(q => q.pu && !q.pu.taken)) {
+      const types = ['cool', 'x2'];
+      if (!shield) types.push('shield', 'shield');
+      p.pu = { type: types[Math.floor(Math.random() * types.length)], taken: false, ph: Math.random() * TAU };
+    }
+    pipes.push(p);
   }
 
   function burst(x, y, n, cols, spd, grav, size) {
@@ -325,6 +382,9 @@
       parts.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - spd * 0.3, g: 400, life: 0.8, max: 0.8,
         r: 12 + Math.random() * 6, col: Math.random() < 0.5 ? '#39ff88' : '#7df9ff', txt: Math.random() < 0.5 ? '0' : '1' });
     }
+  }
+  function floatText(txt, col, size = 16) {
+    parts.push({ x: bird.x + 10, y: bird.y - 34, vx: 0, vy: -55, g: 0, life: 1.2, max: 1.2, r: size, col, txt, outline: true });
   }
 
   // ---------- Actions ----------
@@ -350,20 +410,61 @@
     if (state === 'play' && !paused && bird.vy < 380) { bird.vy = 380; sfx.dive(); }
   }
 
-  function addScore() {
-    score++; scorePulse = 1; sfx.score();
-    peakLoad = Math.max(peakLoad, loadPct());
-    bits(bird.x + 10, bird.y, 7, 220);
-    if (score === 8) { banner = { text: 'HOT-SWAP RACKS!', t: 1.6 }; sfx.level(); }
-    else if (score % 10 === 0) { banner = { text: 'TRAFFIC SPIKE!', t: 1.6 }; sfx.level(); }
+  function setBanner(text, sub, col) { banner = { text, sub, col, t: 1.8 }; }
+
+  function addScore(base, quiet) {
+    const prev = score, prevZ = zoneIdx();
+    const n = base * (boostT > 0 ? 2 : 1);
+    score += n; scorePulse = 1;
+    if (!quiet) sfx.score();
+    bits(bird.x + 10, bird.y, boostT > 0 ? 10 : 7, 220);
+    const z = zoneIdx();
+    if (z > maxZone) maxZone = z;
+    if (z > prevZ) {
+      setBanner(ZONES[z].name, `ZONE ${z + 1} · ${ZONES[z].tip}`, ZONES[z].accent);
+      sfx.zone(); flash = Math.max(flash, 0.35);
+    } else if (prev < 8 && score >= 8) {
+      setBanner('HOT-SWAP RACKS!', 'Some racks are on the move', '#ffb020'); sfx.level();
+    } else if (Math.floor(score / 10) > Math.floor(prev / 10)) {
+      setBanner('TRAFFIC SPIKE!', `Load ${loadPct()}%`, '#ffb020'); sfx.level();
+    }
+  }
+
+  function closeCall() {
+    nearMisses++;
+    slowmoT = 0.45;
+    const bonus = boostT > 0 ? 2 : 1;
+    addScore(1, true);
+    sfx.close();
+    floatText(`CLOSE CALL +${bonus}`, '#ffb020', 17);
+    buzz(20);
+  }
+
+  function collect(type, x, y) {
+    puUsed++;
+    if (type === 'shield') shield = true;
+    else if (type === 'cool') slowT = COOL_TIME;
+    else if (type === 'x2') boostT = BOOST_TIME;
+    sfx.power();
+    burst(x, y, 12, [PU[type].col, '#ffffff'], 220, 300, 4);
+    floatText(PU[type].label, PU[type].col, 16);
+    buzz(15);
+  }
+
+  function shieldSave() {
+    shield = false; invT = 1.3;
+    sfx.shield(); shake = 8; flash = Math.max(flash, 0.3);
+    burst(bird.x, bird.y, 18, ['#00e5ff', '#ffffff', '#7df9ff'], 300, 300, 4);
+    floatText('FAILOVER!', '#00e5ff', 20);
+    buzz(40);
   }
 
   function die() {
     if (state !== 'play') return;
     state = 'dying'; deadT = 0; shake = 14; flash = 1;
-    stopHum(); sfx.hit();
+    stopHum(); sfx.hit(); buzz([60, 40, 80]);
     burst(bird.x, bird.y, 16, ['#ffb020', '#ff3d6e', '#ffffff', '#ffe066'], 280, 700, 3.5);
-    parts.push({ x: bird.x, y: bird.y - 20, vx: 0, vy: -60, g: 0, life: 1.2, max: 1.2, r: 20, col: '#ff3d6e', txt: 'ERR' });
+    parts.push({ x: bird.x, y: bird.y - 20, vx: 0, vy: -60, g: 0, life: 1.2, max: 1.2, r: 20, col: '#ff3d6e', txt: 'ERR', outline: true });
     if (bird.y + bird.r < GROUND - 1) bird.vy = -170; else grounded = true;
     if (score > best) { best = score; newBest = true; store.set('best', best); }
   }
@@ -385,48 +486,100 @@
     }
     return false;
   }
+  const plumeX = p => p.x + PW / 2 - p.sp / 2;
+  const puPos = p => ({ x: p.x + PW / 2, y: p.y + Math.sin(time * 3 + p.pu.ph) * 6 });
 
   // ---------- Update ----------
   function update(dt) {
     time += dt;
+
+    const target = slowmoT > 0 ? 0.35 : slowT > 0 ? 0.55 : 1;
+    timeScale += (target - timeScale) * Math.min(1, dt * 10);
+    const gdt = dt * timeScale;
+
+    if (state === 'play') {
+      slowT = Math.max(0, slowT - dt);
+      boostT = Math.max(0, boostT - dt);
+      slowmoT = Math.max(0, slowmoT - dt);
+      invT = Math.max(0, invT - dt);
+      aliveT += dt;
+    }
+
     const D = diff();
     const spd = state === 'play' ? D.speed : (state === 'title' || state === 'ready') ? 130 : 0;
-    worldX += spd * dt;
+    worldX += spd * gdt;
 
-    heat += (loadFrac() - heat) * Math.min(1, dt * 1.2);
+    zoneBlend += (zoneIdx() - zoneBlend) * Math.min(1, dt * 1.5);
 
-    bird.flapT = Math.max(0, bird.flapT - dt);
-    if (state !== 'dying' && state !== 'over') bird.wing += dt * (bird.flapT > 0 ? 30 : 9);
+    bird.flapT = Math.max(0, bird.flapT - gdt);
+    if (state !== 'dying' && state !== 'over') bird.wing += gdt * (bird.flapT > 0 ? 30 : 9);
 
     if (state === 'title' || state === 'ready') {
       bird.x = birdX();
       bird.y = H * 0.42 + Math.sin(time * 3.2) * 9;
       bird.rot = Math.sin(time * 3.2 + 1) * 0.08;
     } else if (state === 'play') {
-      bird.vy = Math.min(bird.vy + G * dt, MAXFALL);
-      bird.y += bird.vy * dt;
+      // heat plumes (hot aisle)
+      inPlume = false;
+      for (const p of pipes) {
+        if (p.plume && Math.abs(bird.x - plumeX(p)) < 26) { inPlume = true; break; }
+      }
+      bird.vy += (G - (inPlume ? 2200 : 0)) * gdt;
+      bird.vy = clamp(bird.vy, -FLAP * 1.1, MAXFALL);
+      bird.y += bird.vy * gdt;
       if (bird.y < bird.r) { bird.y = bird.r; if (bird.vy < 0) bird.vy = 0; }
       const tr = clamp(bird.vy / 560, -0.5, 1.2);
-      bird.rot += (tr - bird.rot) * Math.min(1, dt * 12);
+      bird.rot += (tr - bird.rot) * Math.min(1, gdt * 12);
 
       for (const p of pipes) {
-        p.x -= D.speed * dt;
-        if (p.amp) { p.t += dt; p.y = p.base + Math.sin(p.t * p.freq + p.ph) * p.amp; }
+        p.x -= D.speed * gdt;
+        if (p.amp) { p.t += gdt; p.y = p.base + Math.sin(p.t * p.freq + p.ph) * p.amp; }
       }
       const lastP = pipes[pipes.length - 1];
       if (!lastP || lastP.x < W + 40 - D.spacing) spawn(lastP ? lastP.x + D.spacing : W + 40);
-      while (pipes.length && pipes[0].x < -PW - 30) pipes.shift();
-      for (const p of pipes) if (!p.passed && p.x + PW / 2 < bird.x) { p.passed = true; addScore(); }
+      while (pipes.length && pipes[0].x < -PW - 30 - 200) pipes.shift();
 
-      trailT -= dt;
+      for (const p of pipes) {
+        // track clearance while passing through the gap
+        if (bird.x + bird.r > p.x - 6 && bird.x - bird.r < p.x + PW + 6) {
+          const c = Math.min(bird.y - bird.r - (p.y - p.gap / 2), (p.y + p.gap / 2) - (bird.y + bird.r));
+          if (c < p.minClear) p.minClear = c;
+          if (invT > 0) p.minClear = -1;
+        }
+        if (!p.passed && p.x + PW / 2 < bird.x) { p.passed = true; addScore(1); }
+        if (!p.cleared && p.x + PW + 6 < bird.x - bird.r) {
+          p.cleared = true;
+          if (p.minClear >= 0 && p.minClear < 9) closeCall();
+        }
+        if (p.pu && !p.pu.taken) {
+          const q = puPos(p);
+          if (Math.hypot(bird.x - q.x, bird.y - q.y) < bird.r + 15) { p.pu.taken = true; collect(p.pu.type, q.x, q.y); }
+        }
+      }
+
+      trailT -= gdt;
       if (trailT <= 0) {
         trailT = 0.07;
         parts.push({ x: bird.x - 18, y: bird.y + (Math.random() - 0.5) * 14, vx: -D.speed * 0.35, vy: (Math.random() - 0.5) * 20,
-          g: 0, life: 0.55, max: 0.55, r: 11, col: '#39ff88', txt: Math.random() < 0.5 ? '0' : '1' });
+          g: 0, life: 0.55, max: 0.55, r: 11, col: boostT > 0 ? '#ffd23f' : '#39ff88', txt: Math.random() < 0.5 ? '0' : '1' });
       }
+      if (inPlume && Math.random() < gdt * 30) {
+        parts.push({ x: bird.x + (Math.random() - 0.5) * 30, y: bird.y + 20, vx: 0, vy: -160, g: 0, life: 0.4, max: 0.4,
+          r: 3, col: '#ff7a2f' });
+      }
+      if (zoneIdx() === 3) shake = Math.max(shake, 1.3);
 
-      if (hitPipes()) die();
-      else if (bird.y + bird.r >= GROUND) { bird.y = GROUND - bird.r; die(); }
+      if (invT <= 0 && hitPipes()) {
+        if (shield) shieldSave(); else die();
+      }
+      if (state === 'play' && bird.y + bird.r >= GROUND) {
+        if (shield || invT > 0) {
+          if (shield) shieldSave();
+          bird.y = GROUND - bird.r; bird.vy = -FLAP * 1.05;
+        } else {
+          bird.y = GROUND - bird.r; die();
+        }
+      }
     } else if (state === 'dying' || state === 'over') {
       if (!grounded) {
         bird.vy = Math.min(bird.vy + G * dt, MAXFALL);
@@ -446,9 +599,9 @@
 
     for (let i = parts.length - 1; i >= 0; i--) {
       const p = parts[i];
-      p.life -= dt;
+      p.life -= gdt;
       if (p.life <= 0) { parts.splice(i, 1); continue; }
-      p.vy += p.g * dt; p.x += p.vx * dt; p.y += p.vy * dt;
+      p.vy += p.g * gdt; p.x += p.vx * gdt; p.y += p.vy * gdt;
     }
     if (banner) { banner.t -= dt; if (banner.t <= 0) banner = null; }
     shake = Math.max(0, shake - dt * 40);
@@ -473,9 +626,14 @@
     cx.strokeText(txt, x, y);
     cx.fillStyle = fill; cx.fillText(txt, x, y);
   }
+  function zoneCols() {
+    const i = Math.min(Math.floor(zoneBlend), ZONES.length - 1), f = zoneBlend - i;
+    const a = ZONES[i], b = ZONES[Math.min(i + 1, ZONES.length - 1)];
+    return [mix(a.top, b.top, f), mix(a.bot, b.bot, f)];
+  }
 
   // ---------- Scene ----------
-  let lightGrad = null, ventGrad = null, floorGlow = null;
+  let lightGrad = null, ventGrad = null, floorGlow = null, plumeGrad = null;
   function makeGradients() {
     lightGrad = cx.createLinearGradient(0, 14, 0, GROUND);
     lightGrad.addColorStop(0, 'rgba(190,230,255,.14)');
@@ -486,6 +644,9 @@
     floorGlow = cx.createLinearGradient(0, GROUND - 160, 0, GROUND);
     floorGlow.addColorStop(0, 'rgba(0,229,255,0)');
     floorGlow.addColorStop(1, 'rgba(0,229,255,.10)');
+    plumeGrad = cx.createLinearGradient(0, 60, 0, GROUND);
+    plumeGrad.addColorStop(0, 'rgba(255,122,47,0)');
+    plumeGrad.addColorStop(1, 'rgba(255,122,47,.32)');
   }
   makeGradients();
 
@@ -548,7 +709,6 @@
   function drawFloor() {
     const tw = 48, band = 20, top = GROUND;
     const start = Math.floor(worldX / tw) - 1, n = Math.ceil(W / tw) + 3;
-    // cold air rising from vent tiles
     cx.fillStyle = ventGrad;
     for (let i = start; i < start + n; i++) {
       if (hash(i * 7.3) < 0.28) {
@@ -558,7 +718,6 @@
         cx.lineTo(x + tw + 8 + wob, top - 80); cx.lineTo(x - 8 + wob, top - 80); cx.closePath(); cx.fill();
       }
     }
-    // plenum
     cx.fillStyle = '#0a1230'; cx.fillRect(-20, top, W + 40, H - top + 600);
     const cables = ['#ffc400', '#38bdf8', '#ff3df2'];
     cx.lineWidth = 3;
@@ -572,7 +731,6 @@
       cx.fillStyle = '#33456f'; cx.fillRect(x - 2, top + band, 4, H - top - band);
       cx.fillRect(x - 8, H - 8, 16, 8);
     }
-    // tiles
     for (let i = start; i < start + n; i++) {
       const x = i * tw - worldX;
       const vent = hash(i * 7.3) < 0.28;
@@ -587,6 +745,29 @@
     cx.fillStyle = '#8390aa'; cx.fillRect(-20, top + band - 3, W + 40, 3);
     cx.strokeStyle = INK; cx.lineWidth = 3;
     cx.beginPath(); cx.moveTo(-20, top); cx.lineTo(W + 20, top); cx.stroke();
+  }
+
+  function drawPlume(p) {
+    const c = plumeX(p), w = 52;
+    if (c < -60 || c > W + 60) return;
+    const wob = Math.sin(time * 6 + p.id) * 3;
+    cx.fillStyle = plumeGrad;
+    cx.beginPath();
+    cx.moveTo(c - w / 2, GROUND); cx.lineTo(c + w / 2, GROUND);
+    cx.lineTo(c + w / 2 + 8 + wob, 70); cx.lineTo(c - w / 2 - 8 + wob, 70);
+    cx.closePath(); cx.fill();
+    // floor heat grille
+    cx.fillStyle = '#ff7a2f'; cx.fillRect(c - w / 2, GROUND - 3, w, 4);
+    // rising chevrons
+    cx.strokeStyle = 'rgba(255,170,90,.75)'; cx.lineWidth = 3; cx.lineJoin = 'round';
+    const span = GROUND - 90;
+    for (let k = 0; k < 5; k++) {
+      const y = GROUND - 20 - ((time * 140 + k * (span / 5) + p.id * 37) % span);
+      const a = clamp((y - 70) / 120, 0, 1);
+      cx.globalAlpha = a;
+      cx.beginPath(); cx.moveTo(c - 10, y + 7); cx.lineTo(c, y); cx.lineTo(c + 10, y + 7); cx.stroke();
+    }
+    cx.globalAlpha = 1;
   }
 
   // ---------- Racks ----------
@@ -634,44 +815,63 @@
   }
   function drawRack(p) {
     const t = p.y - p.gap / 2, b = p.y + p.gap / 2;
+    const jitter = (state === 'play' || state === 'dying') && zoneIdx() === 3 ? Math.sin(time * 45 + p.id) * 1.6 : 0;
+    cx.save(); cx.translate(jitter, 0);
     rackBody(p.x, -30, PW, t - CAPH + 30, p, true);
     rackCap(p.x - 6, t - CAPH, PW + 12, CAPH, p, true);
     rackBody(p.x, b + CAPH, PW, GROUND - b - CAPH + 2, p, false);
     rackCap(p.x - 6, b, PW + 12, CAPH, p, false);
+    cx.restore();
+  }
+
+  // ---------- Power-ups ----------
+  function drawPowerUp(p) {
+    const q = puPos(p), type = p.pu.type, col = PU[type].col;
+    const pulse = 1 + Math.sin(time * 6) * 0.06;
+    cx.save(); cx.translate(q.x, q.y); cx.scale(pulse, pulse);
+    const gl = cx.createRadialGradient(0, 0, 4, 0, 0, 30);
+    gl.addColorStop(0, col + '88'); gl.addColorStop(1, col + '00');
+    cx.fillStyle = gl; cx.beginPath(); cx.arc(0, 0, 30, 0, TAU); cx.fill();
+    cx.fillStyle = '#0a1230'; cx.beginPath(); cx.arc(0, 0, 15, 0, TAU); cx.fill();
+    cx.lineWidth = 3; cx.strokeStyle = col; cx.stroke();
+    cx.strokeStyle = col; cx.fillStyle = col; cx.lineWidth = 2.5; cx.lineCap = 'round'; cx.lineJoin = 'round';
+    if (type === 'shield') {
+      cx.beginPath();
+      cx.moveTo(0, -8); cx.lineTo(7, -5); cx.lineTo(6, 2); cx.quadraticCurveTo(4, 7, 0, 9);
+      cx.quadraticCurveTo(-4, 7, -6, 2); cx.lineTo(-7, -5); cx.closePath();
+      cx.globalAlpha = 0.35; cx.fill(); cx.globalAlpha = 1; cx.stroke();
+    } else if (type === 'cool') {
+      for (let k = 0; k < 3; k++) {
+        const a = k * Math.PI / 3;
+        cx.beginPath(); cx.moveTo(Math.cos(a) * -8, Math.sin(a) * -8); cx.lineTo(Math.cos(a) * 8, Math.sin(a) * 8); cx.stroke();
+      }
+      cx.beginPath(); cx.arc(0, 0, 2.5, 0, TAU); cx.fill();
+    } else {
+      cx.font = `900 12px ${MONO}`; cx.textAlign = 'center'; cx.textBaseline = 'middle';
+      cx.fillText('x2', 0, 1);
+    }
+    cx.restore();
+    cx.lineCap = 'butt';
   }
 
   // ---------- Packet (player) ----------
-  function drawPacket() {
-    const b = bird;
-    const hgt = clamp((GROUND - b.y) / 400, 0, 1);
-    cx.fillStyle = `rgba(0,229,255,${0.25 * (1 - hgt)})`;
-    cx.beginPath(); cx.ellipse(b.x, GROUND + 4, 18 * (1 - hgt * 0.6), 4, 0, 0, TAU); cx.fill();
-
-    const dead = state === 'dying' || state === 'over';
-    cx.save();
-    cx.translate(b.x, b.y);
-    cx.rotate(b.rot);
+  function packetSprite(dead, wa) {
     cx.lineJoin = 'round';
-
-    // glow
     const gl = cx.createRadialGradient(0, 0, 4, 0, 0, 34);
-    gl.addColorStop(0, dead ? 'rgba(255,61,110,.35)' : 'rgba(0,229,255,.4)');
+    gl.addColorStop(0, dead ? 'rgba(255,61,110,.35)' : boostT > 0 ? 'rgba(255,210,63,.45)' : 'rgba(0,229,255,.4)');
     gl.addColorStop(1, 'rgba(0,229,255,0)');
     cx.fillStyle = gl; cx.beginPath(); cx.arc(0, 0, 34, 0, TAU); cx.fill();
 
-    // antenna
     cx.strokeStyle = INK; cx.lineWidth = 2.5;
     cx.beginPath(); cx.moveTo(-2, -13); cx.lineTo(-6, -23); cx.stroke();
     const ab = Math.sin(time * 8) > 0;
     cx.fillStyle = dead ? '#ff3d6e' : (ab ? '#39ff88' : '#1d6a40');
     cx.beginPath(); cx.arc(-6, -24, 3.5, 0, TAU); cx.fill(); cx.lineWidth = 2; cx.stroke();
 
-    // body
     const g = cx.createLinearGradient(0, -14, 0, 14);
     g.addColorStop(0, dead ? '#ffb3c4' : '#a8fbff');
     g.addColorStop(1, dead ? '#ff3d6e' : '#00b8d9');
     rr(-16, -14, 32, 28, 7); cx.fillStyle = g; cx.fill();
-    // header band
     cx.save(); rr(-16, -14, 32, 28, 7); cx.clip();
     cx.fillStyle = dead ? '#8a1c3a' : '#075a80'; cx.fillRect(-16, -14, 32, 8);
     cx.fillStyle = '#e8f6ff';
@@ -680,7 +880,6 @@
     cx.restore();
     rr(-16, -14, 32, 28, 7); cx.lineWidth = 3; cx.strokeStyle = INK; cx.stroke();
 
-    // eyes
     if (dead) {
       cx.lineWidth = 2.5; cx.strokeStyle = INK;
       [[2, 2], [10, 2]].forEach(([ex, ey]) => {
@@ -696,15 +895,37 @@
       cx.beginPath(); cx.arc(6, 8, 3, 0.2, Math.PI - 0.2); cx.stroke();
     }
 
-    // fan wing
-    const wa = dead ? 0.4 : Math.sin(b.wing) * 0.8;
     cx.save(); cx.translate(-12, 4); cx.rotate(wa);
     cx.fillStyle = 'rgba(125,249,255,.85)';
     rr(-16, -4, 16, 8, 4); cx.fill();
     cx.lineWidth = 2; cx.strokeStyle = INK; cx.stroke();
     cx.restore();
+  }
 
+  function drawPacket() {
+    const b = bird;
+    const hgt = clamp((GROUND - b.y) / 400, 0, 1);
+    cx.fillStyle = `rgba(0,229,255,${0.25 * (1 - hgt)})`;
+    cx.beginPath(); cx.ellipse(b.x, GROUND + 4, 18 * (1 - hgt * 0.6), 4, 0, 0, TAU); cx.fill();
+
+    const dead = state === 'dying' || state === 'over';
+    if (invT > 0 && Math.floor(time * 16) % 2 === 0) cx.globalAlpha = 0.35;
+    cx.save();
+    cx.translate(b.x, b.y);
+    cx.rotate(b.rot);
+    packetSprite(dead, dead ? 0.4 : Math.sin(b.wing) * 0.8);
     cx.restore();
+    cx.globalAlpha = 1;
+
+    if (shield && !dead) {
+      const r = 27 + Math.sin(time * 5) * 2;
+      cx.fillStyle = 'rgba(0,229,255,.10)';
+      cx.beginPath(); cx.arc(b.x, b.y, r, 0, TAU); cx.fill();
+      cx.strokeStyle = 'rgba(0,229,255,.85)'; cx.lineWidth = 2.5;
+      cx.setLineDash([6, 5]); cx.lineDashOffset = -time * 20;
+      cx.beginPath(); cx.arc(b.x, b.y, r, 0, TAU); cx.stroke();
+      cx.setLineDash([]);
+    }
   }
 
   // ---------- HUD ----------
@@ -736,16 +957,38 @@
     }
     cx.fillStyle = '#9fb3d9'; cx.font = `700 11px ${MONO}`;
     cx.fillText(`LOAD ${pct}% ${loadTier(pct)}`, 16, 98);
+    const Z = ZONES[zoneIdx()];
+    cx.fillStyle = Z.accent; cx.font = `800 11px ${MONO}`;
+    cx.fillText(`Z${zoneIdx() + 1} ${Z.name}`, 16, 113);
+
+    let cy = 124;
+    const chip = (label, col, frac) => {
+      rr(16, cy, 104, 18, 5); cx.fillStyle = 'rgba(8,14,36,.9)'; cx.fill();
+      if (frac != null) {
+        cx.save(); rr(16, cy, 104, 18, 5); cx.clip();
+        cx.globalAlpha = 0.3; cx.fillStyle = col; cx.fillRect(16, cy, 104 * frac, 18);
+        cx.restore();
+      }
+      rr(16, cy, 104, 18, 5); cx.lineWidth = 1.5; cx.strokeStyle = col; cx.stroke();
+      cx.fillStyle = col; cx.font = `800 10px ${MONO}`; cx.textAlign = 'left'; cx.textBaseline = 'middle';
+      cx.fillText(label, 22, cy + 9.5);
+      cy += 22;
+    };
+    if (shield) chip('🛡 FAILOVER', '#00e5ff', null);
+    if (slowT > 0) chip('❄ COOLING', '#a5f3fc', slowT / COOL_TIME);
+    if (boostT > 0) chip('x2 BANDWIDTH', '#ffd23f', boostT / BOOST_TIME);
 
     const s = 54 * (1 + scorePulse * 0.28);
-    outlined(String(score), W / 2, 130, s, '#7df9ff');
+    outlined(String(score), W / 2, 130, s, boostT > 0 ? '#ffd23f' : '#7df9ff');
   }
+
+  function fitSize(text, max) { return Math.min(max, (W - 30) / Math.max(1, text.length * 0.62)); }
 
   // ---------- Main draw ----------
   function draw() {
     const vw = cv.width, vh = cv.height;
     cx.setTransform(1, 0, 0, 1, 0, 0);
-    const c1 = mix(COLD[0], HOT[0], heat), c2 = mix(COLD[1], HOT[1], heat);
+    const [c1, c2] = zoneCols();
     const gr = cx.createLinearGradient(0, 0, 0, vh);
     gr.addColorStop(0, rgb(c1)); gr.addColorStop(1, rgb(c2));
     cx.fillStyle = gr; cx.fillRect(0, 0, vw, vh);
@@ -761,17 +1004,24 @@
     cx.fillStyle = floorGlow; cx.fillRect(-20, GROUND - 160, W + 40, 160);
     drawTray();
 
+    for (const p of pipes) if (p.plume) drawPlume(p);
     for (const p of pipes) drawRack(p);
+    for (const p of pipes) if (p.pu && !p.pu.taken) drawPowerUp(p);
 
     drawFloor();
 
     for (const p of parts) {
       cx.globalAlpha = clamp(p.life / p.max * 1.4, 0, 1);
-      cx.fillStyle = p.col;
       if (p.txt) {
-        cx.font = `800 ${p.r}px ${MONO}`; cx.textAlign = 'center'; cx.textBaseline = 'middle';
-        cx.fillText(p.txt, p.x, p.y);
+        if (p.outline) {
+          outlined(p.txt, p.x, p.y, p.r, p.col);
+        } else {
+          cx.fillStyle = p.col;
+          cx.font = `800 ${p.r}px ${MONO}`; cx.textAlign = 'center'; cx.textBaseline = 'middle';
+          cx.fillText(p.txt, p.x, p.y);
+        }
       } else {
+        cx.fillStyle = p.col;
         cx.fillRect(p.x - p.r / 2, p.y - p.r / 2, p.r, p.r);
       }
     }
@@ -790,9 +1040,10 @@
     }
 
     if (banner) {
-      const t = banner.t, a = clamp(t / 0.4, 0, 1), sc = 1 + Math.max(0, t - 1.3) * 1.5;
+      const t = banner.t, a = clamp(t / 0.4, 0, 1), sc = 1 + Math.max(0, t - 1.5) * 1.5;
       cx.globalAlpha = a;
-      outlined(banner.text, W / 2, H * 0.32, Math.min(36, W / 10) * sc, '#ffb020');
+      outlined(banner.text, W / 2, H * 0.3, fitSize(banner.text, 36) * sc, banner.col || '#ffb020');
+      if (banner.sub) outlined(banner.sub, W / 2, H * 0.3 + 36, fitSize(banner.sub, 15), '#e8f6ff', 'center', 700);
       cx.globalAlpha = 1;
     }
 
@@ -803,16 +1054,23 @@
     }
 
     if (flash > 0) {
-      cx.fillStyle = `rgba(255,61,110,${flash * 0.45})`;
+      cx.fillStyle = state === 'play' ? `rgba(255,255,255,${flash * 0.45})` : `rgba(255,61,110,${flash * 0.45})`;
       cx.fillRect(-20, -400, W + 40, H + 800);
     }
 
-    // scanlines + glitch (device pixels)
+    // screen effects (device pixels)
     cx.setTransform(1, 0, 0, 1, 0, 0);
+    if (state === 'play' && (slowT > 0 || slowmoT > 0)) {
+      const vg = cx.createRadialGradient(vw / 2, vh / 2, Math.min(vw, vh) * 0.3, vw / 2, vh / 2, Math.max(vw, vh) * 0.75);
+      const col = slowmoT > 0 ? '255,176,32' : '165,243,252';
+      const a = slowmoT > 0 ? 0.35 : 0.3 * Math.min(1, slowT / 0.5);
+      vg.addColorStop(0, `rgba(${col},0)`); vg.addColorStop(1, `rgba(${col},${a})`);
+      cx.fillStyle = vg; cx.fillRect(0, 0, vw, vh);
+    }
     cx.fillStyle = 'rgba(0,0,0,.07)';
     const sl = Math.max(1, Math.round(dpr));
     for (let y = 0; y < vh; y += 3 * sl) cx.fillRect(0, y, vw, sl);
-    if (flash > 0.25) {
+    if (flash > 0.25 && state !== 'play') {
       for (let i = 0; i < 5; i++) {
         const y = Math.floor(Math.random() * (vh - 2));
         const h = Math.max(1, Math.min(Math.floor((6 + Math.random() * 24) * dpr), vh - y - 1));
@@ -820,6 +1078,97 @@
         try { cx.drawImage(cv, 0, y, vw, h, dx, y, vw, h); } catch (e) {}
       }
     }
+  }
+
+  // ---------- Share card ----------
+  function shareUrl() {
+    return /^https?:/.test(location.protocol) ? location.origin + location.pathname : '';
+  }
+  function makeCard() {
+    const c = document.createElement('canvas');
+    c.width = 1080; c.height = 1080;
+    const g = c.getContext('2d');
+    if (!g) return null;
+    const saved = cx; cx = g;
+    try {
+      const Z = ZONES[Math.min(maxZone, ZONES.length - 1)];
+      const gr = g.createLinearGradient(0, 0, 0, 1080);
+      gr.addColorStop(0, rgb(Z.top)); gr.addColorStop(1, rgb(Z.bot));
+      g.fillStyle = gr; g.fillRect(0, 0, 1080, 1080);
+      // side racks
+      for (const sx of [30, 140, 870, 980]) {
+        g.fillStyle = '#141a2c'; g.fillRect(sx, 110, 72, 870);
+        for (let y = 130; y < 960; y += 22) {
+          g.fillStyle = '#252e47'; g.fillRect(sx + 8, y, 56, 16);
+          const h = hash(sx * 1.7 + y);
+          if (h > 0.2) { g.fillStyle = h > 0.9 ? '#ffb020' : h > 0.6 ? '#38bdf8' : '#39ff88'; g.fillRect(sx + 50, y + 6, 7, 5); }
+        }
+        g.strokeStyle = INK; g.lineWidth = 5; g.strokeRect(sx, 110, 72, 870);
+      }
+      g.fillStyle = '#dde5ef'; g.fillRect(0, 980, 1080, 28);
+      g.fillStyle = '#0a1230'; g.fillRect(0, 1008, 1080, 72);
+      outlined('FLAPPY', 540, 95, 82, '#00e5ff');
+      outlined('PACKET', 540, 175, 82, '#39ff88');
+      g.save(); g.translate(540, 335); g.scale(4, 4); packetSprite(false, 0.3); g.restore();
+      g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.fillStyle = '#8ea3c9'; g.font = `800 30px ${MONO}`; g.fillText('TECH', 540, 445);
+      outlined(player, 540, 500, 54, '#ffffff');
+      outlined(String(score), 540, 660, 200, '#7df9ff');
+      g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.fillStyle = '#8ea3c9'; g.font = `800 30px ${MONO}`; g.fillText('PACKETS DELIVERED', 540, 790);
+      outlined(rankTitle(score).toUpperCase(), 540, 852, 44, '#ffb020');
+      g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.fillStyle = '#e8f6ff'; g.font = `700 24px ${MONO}`;
+      g.fillText(`BEST ${best} · ${Z.name} · ${nearMisses} CLOSE CALL${nearMisses === 1 ? '' : 'S'}`, 540, 918);
+      const u = shareUrl().replace(/^https?:\/\//, '').replace(/\/$/, '');
+      g.fillStyle = '#8ea3c9'; g.font = `700 26px ${MONO}`;
+      g.fillText(u ? `Can you beat me? ${u}` : 'Can you beat me?', 540, 1044);
+    } finally { cx = saved; }
+    return c;
+  }
+  function prepareCard() {
+    cardFile = null; cardCanvas = null;
+    try {
+      cardCanvas = makeCard();
+      if (cardCanvas && cardCanvas.toBlob) {
+        cardCanvas.toBlob(b => {
+          if (!b) return;
+          try { cardFile = new File([b], 'flappy-packet-score.png', { type: 'image/png' }); } catch (e) { cardFile = null; }
+        }, 'image/png');
+      }
+    } catch (e) { cardCanvas = null; }
+  }
+  function shareFeedback(msg) {
+    shareBtn.textContent = msg;
+    setTimeout(() => { shareBtn.textContent = '📤 SHARE SCORE'; }, 1800);
+  }
+  function downloadCard() {
+    if (!cardCanvas) { shareFeedback('SHARE NOT SUPPORTED'); return; }
+    try {
+      const a = document.createElement('a');
+      a.href = cardCanvas.toDataURL('image/png');
+      a.download = 'flappy-packet-score.png';
+      document.body.appendChild(a); a.click(); a.remove();
+      shareFeedback('✓ IMAGE SAVED');
+    } catch (e) { shareFeedback('SHARE NOT SUPPORTED'); }
+  }
+  function shareScore() {
+    const url = shareUrl();
+    const text = `I delivered ${score} packet${score === 1 ? '' : 's'} in Flappy Packet (${rankTitle(score)}). Can you beat me?`;
+    try {
+      if (cardFile && navigator.canShare && navigator.canShare({ files: [cardFile] })) {
+        navigator.share({ files: [cardFile], title: 'Flappy Packet', text: url ? `${text} ${url}` : text })
+          .catch(e => { if (!e || e.name !== 'AbortError') downloadCard(); });
+        return;
+      }
+      if (navigator.share) {
+        const data = { title: 'Flappy Packet', text };
+        if (url) data.url = url;
+        navigator.share(data).catch(e => { if (!e || e.name !== 'AbortError') downloadCard(); });
+        return;
+      }
+    } catch (e) {}
+    downloadCard();
   }
 
   // ---------- Screens ----------
@@ -844,6 +1193,12 @@
     reset(); state = 'ready';
   }
 
+  function fmtTime(s) {
+    if (s < 60) return `${s.toFixed(1)}s`;
+    const m = Math.floor(s / 60), r = Math.floor(s % 60);
+    return `${m}m ${String(r).padStart(2, '0')}s`;
+  }
+
   function showOver() {
     state = 'over';
     let msg;
@@ -851,16 +1206,22 @@
     else if (score < 5) msg = `Retry the handshake, ${player}!`;
     else if (score < 15) msg = `Solid uptime, ${player}!`;
     else if (score < 30) msg = `Senior tech energy, ${player}!`;
-    else msg = `Five nines, ${player}! Legend.`;
+    else if (score < 60) msg = `Five nines, ${player}! Legend.`;
+    else msg = `Hyperscale legend, ${player}!`;
     $('overMsg').textContent = msg;
     $('oScore').textContent = score;
     $('oBest').textContent = best;
-    $('oLoad').textContent = `${peakLoad}% ${loadTier(peakLoad)}`;
+    $('oZone').textContent = ZONES[maxZone].name;
+    $('oClose').textContent = nearMisses;
+    $('oPU').textContent = puUsed;
+    $('oTime').textContent = fmtTime(aliveT);
     $('newBest').classList.toggle('gone', !newBest);
+    shareBtn.textContent = '📤 SHARE SCORE';
     if (newBest) sfx.best(); else sfx.over();
     overEl.classList.remove('hidden'); replay(overCard);
     canAgain = false; againBtn.disabled = true;
     setTimeout(() => { canAgain = true; againBtn.disabled = false; }, 650);
+    setTimeout(prepareCard, 30);
   }
 
   function restart() {
@@ -882,6 +1243,7 @@
   playBtn.addEventListener('click', e => { e.currentTarget.blur(); startGame(); });
   againBtn.addEventListener('click', e => { e.currentTarget.blur(); restart(); });
   changeBtn.addEventListener('click', e => { e.currentTarget.blur(); changeName(); });
+  shareBtn.addEventListener('click', e => { e.currentTarget.blur(); shareScore(); });
   muteBtn.addEventListener('click', e => { e.currentTarget.blur(); toggleMute(); });
   nameIn.addEventListener('input', () => { hint.textContent = ''; });
 
